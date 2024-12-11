@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  elasticsearch:
+    image: elasticsearch:7.17.0
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=${ELASTICSEARCH_PASSWORD}
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+
+  ngrok:
+    image: ngrok/ngrok:alpine
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+    command: 'http host.docker.internal:3000'
+    ports:
+      - '4040:4040'
+    expose:
+      - '4040'
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - CORS_ORIGIN=${CORS_ORIGIN}
+      - PORT=${PORT}
+      - ELASTICSEARCH_HOST=${ELASTICSEARCH_HOST}
+      - ELASTICSEARCH_USERNAME=${ELASTICSEARCH_USERNAME}
+      - ELASTICSEARCH_PASSWORD=${ELASTICSEARCH_PASSWORD}
+      - OUTLOOK_CLIENT_ID=${OUTLOOK_CLIENT_ID}
+      - OUTLOOK_CLIENT_SECRET=${OUTLOOK_CLIENT_SECRET}
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+      - ENVIRONMENT=production
+    depends_on:
+      - ngrok
+      - elasticsearch
+    command: npm run start
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:80"
+    depends_on:
+      - backend
+
+volumes:
+  es-data:
