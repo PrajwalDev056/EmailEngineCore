@@ -27,7 +27,8 @@ class AuthService implements IAuthService {
       await this.storeUser(tokenResponse.token);
       return tokenResponse.token;
     } catch (error: any) {
-      throw error?.message;
+      logger.error('Error getting on-behalf token', { message: error.message });
+      throw new Error('Failed to get on-behalf token');
     }
   }
 
@@ -49,7 +50,7 @@ class AuthService implements IAuthService {
       }
       logger.info(`User stored with Email: ${email}`);
     } catch (error: any) {
-      logger.error(`Error storing user: ${error}`);
+      logger.error('Error storing user', { message: error.message });
     }
   }
 }
