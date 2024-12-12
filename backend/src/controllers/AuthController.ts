@@ -5,6 +5,43 @@ import { TYPES } from '../infrastructure/dependencyInjection/types';
 import { IAuthService } from '../application/interfaces/IAuthService';
 import rateLimiter from '../middleware/rateLimiter';
 
+/**
+ * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Authentication related endpoints
+ */
+
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Login and get an on-behalf token
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               idToken:
+ *                 type: string
+ *                 description: ID token for authentication
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved on-behalf token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: On-behalf token
+ *       404:
+ *         description: Id Token is undefined
+ */
 @controller('/api/auth')
 export class AuthController {
   constructor(@inject(TYPES.AuthService) private authService: IAuthService) {}

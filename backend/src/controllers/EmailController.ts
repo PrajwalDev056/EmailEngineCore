@@ -5,6 +5,52 @@ import { IEmailSyncService } from '../application/interfaces/IEmailSyncService';
 import { TYPES } from '../infrastructure/dependencyInjection/types';
 import rateLimiter from '../middleware/rateLimiter';
 
+/**
+ * @swagger
+ * tags:
+ *   name: Email
+ *   description: Email related endpoints
+ */
+
+/**
+ * @swagger
+ * /api/email/get:
+ *   get:
+ *     summary: Retrieve emails
+ *     tags: [Email]
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved emails
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *       401:
+ *         description: Missing or invalid Authorization header
+ *       500:
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/email/listen:
+ *   post:
+ *     summary: Listen for email notifications
+ *     tags: [Email]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       202:
+ *         description: Successfully processed notifications
+ *       500:
+ *         description: Internal server error
+ */
 @controller('/api/email')
 export class EmailController {
   constructor(
