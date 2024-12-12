@@ -29,6 +29,28 @@ import NgrokService from './infrastructure/config/NgrokService';
 import { Socket } from './infrastructure/config/Socket';
 import { createServer } from 'http';
 
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Email Engine API',
+      version: '1.0.0',
+      description: 'API documentation for Email Engine',
+    },
+    servers: [
+      {
+        url: `http://localhost:${AppConst.Port || 3000}`,
+      },
+    ],
+  },
+  apis: ['./src/controllers/*.ts'],
+};
+
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
+
 (async () => {
   try {
     // Initialize ngrok
@@ -68,6 +90,7 @@ import { createServer } from 'http';
       app.use(bodyParser.urlencoded({ extended: true }));
       app.use(bodyParser.json());
       app.use(rateLimiter);
+      app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
     });
 
     // Set the error handling middleware
