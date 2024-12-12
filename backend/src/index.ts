@@ -28,7 +28,7 @@ import { initializeElasticSearchIndexing } from './infrastructure/config/Initial
 import { initializeIocContainer } from './infrastructure/dependencyInjection/container';
 import rateLimiter from './middleware/rateLimiter';
 
-import './presentation/controllers/HealthCheckController';
+import './controllers/HealthCheckController';
 import AppConst from './utils/Constants';
 import NgrokService from './infrastructure/config/NgrokService';
 import { Socket } from './infrastructure/config/Socket';
@@ -116,7 +116,7 @@ const swaggerSpec = swaggerJSDoc(swaggerOptions);
     });
 
     app.get('/', (req, res) => {
-      res.send('Socket.io server is running');
+      res.status(200).send('Socket.io server is running');
     });
     io.on('connection', (socket) => {
       socket.emit('welcome', { message: 'Welcome to the socket.io server!' });
