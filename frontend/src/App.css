@@ -1,0 +1,60 @@
+.auth-landing-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+}
+
+.auth-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.app-title {
+  text-transform: uppercase;
+  margin-bottom: 4rem;
+  text-align: center;
+}
+
+.auth-btn-container {
+  margin: 2rem 0;
+}
+
+.center-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.email-icon-glow-read {
+  color: #2b88d8;
+}
+
+.email-icon-glow-flag {
+  color: #e37d80;
+}
+
+.email-new {
+  animation: new-email-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes new-email-glow {
+  0% {
+    box-shadow: 0 0 5px #2b88d8;
+  }
+  50% {
+    box-shadow: 0 0 20px #2b88d8;
+  }
+  100% {
+    box-shadow: 0 0 5px #2b88d8;
+  }
+}
