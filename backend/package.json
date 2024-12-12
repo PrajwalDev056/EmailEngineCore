@@ -1,5 +1,5 @@
 {
-  "name": "emailengine",
+  "name": "email-engine-core",
   "version": "1.0.0",
   "description": "Email Engine Core",
   "main": "dist/index.js",

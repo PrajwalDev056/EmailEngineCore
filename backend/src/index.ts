@@ -86,7 +86,7 @@ const swaggerSpec = swaggerJSDoc(swaggerOptions);
       app.use(cookieParser());
       app.use(
         session({
-          secret: 'emailsherlockengine',
+          secret: AppConst.emailServiceName,
           resave: false,
           saveUninitialized: true,
           cookie: { secure: AppConst.NodeEnv === 'production' },

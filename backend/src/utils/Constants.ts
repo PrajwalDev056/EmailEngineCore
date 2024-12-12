@@ -8,5 +8,6 @@ const AppConst = {
   OutlookClientId: process.env.OUTLOOK_CLIENT_ID || '',
   OutlookClientSecret: process.env.OUTLOOK_CLIENT_SECRET || '',
   NgrokAuthToken: process.env.NGROK_AUTHTOKEN || '',
+  emailServiceName: 'emailsherlockengine',
 };
 export default AppConst;
