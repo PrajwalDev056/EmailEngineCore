@@ -32,10 +32,9 @@ const connectElasticsearch = async (): Promise<Client> => {
       return esClient;
     } catch (err: any) {
       attempts++;
-      logger.error(
-        `Elasticsearch connection error (attempt ${attempts}):`,
-        { message: err.message },
-      );
+      logger.error(`Elasticsearch connection error (attempt ${attempts}):`, {
+        message: err.message,
+      });
 
       if (attempts >= MAX_RETRIES) {
         logger.error('Max retries reached. Exiting...');
