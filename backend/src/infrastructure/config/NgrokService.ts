@@ -51,7 +51,9 @@ class NgrokService {
       logger.info(`Ngrok Public Url: ${publicUrl}`);
       return publicUrl;
     } catch (error: any) {
-      logger.error('Error getting ngrok for production', { message: error.message });
+      logger.error('Error getting ngrok for production', {
+        message: error.message,
+      });
       throw new Error('Failed to get ngrok for production');
     }
   }
@@ -96,7 +98,9 @@ class NgrokService {
         logger.info('Ngrok tunnel disconnected');
       }
     } catch (error: any) {
-      logger.error('Error disconnecting from ngrok', { message: error.message });
+      logger.error('Error disconnecting from ngrok', {
+        message: error.message,
+      });
       throw new Error('Failed to disconnect ngrok tunnel');
     }
   }
