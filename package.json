@@ -1,0 +1,15 @@
+{
+  "name": "email-engine-core",
+  "version": "1.0.0",
+  "description": "Email Engine Core",
+  "scripts": {
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up --build",
+    "docker:down": "docker-compose down -v",
+    "docker:prune": "docker system prune -f",
+    "docker:reset": "npm run docker:down && npm run docker:prune && npm run docker:up"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

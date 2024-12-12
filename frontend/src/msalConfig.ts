@@ -1,9 +1,14 @@
 import { Configuration, LogLevel } from "@azure/msal-browser";
-import { AppConst } from "./utils/AppConstant";
-
+// import { AppConst } from "./utils/AppConstant";
 export const msalConfig: Configuration = {
   auth: {
-    clientId: AppConst.OUTLOOK_CLIENT_ID,
+    // clientId: AppConst.OUTLOOK_CLIENT_ID,
+    clientId: "cc069fcc-f275-46e6-a815-720b9de15eef",
+    authority:
+      "https://login.microsoftonline.com/prajwalkraopkrgmail.onmicrosoft.com",
+    redirectUri: "/",
+    postLogoutRedirectUri: "/",
+    navigateToLoginRequestUrl: false,
   },
   cache: {
     cacheLocation: "sessionStorage",
