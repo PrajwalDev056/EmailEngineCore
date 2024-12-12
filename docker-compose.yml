@@ -9,6 +9,11 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   ngrok:
     image: ngrok/ngrok:alpine
@@ -19,6 +24,11 @@ services:
       - '4040:4040'
     expose:
       - '4040'
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:4040/api/tunnels || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   backend:
     build:
@@ -41,6 +51,13 @@ services:
       - ngrok
       - elasticsearch
     command: npm run start
+    volumes:
+      - backend-data:/usr/src/app/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   frontend:
     build:
@@ -50,6 +67,10 @@ services:
       - "3001:80"
     depends_on:
       - backend
+    volumes:
+      - frontend-data:/usr/share/nginx/html
 
 volumes:
   es-data:
+  backend-data:
+  frontend-data:
