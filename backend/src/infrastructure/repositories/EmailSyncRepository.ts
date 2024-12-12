@@ -1,10 +1,10 @@
 import { injectable } from 'inversify';
-import { ElasticsearchRepository } from '../persistence/repositories/ElasticSearchRepository';
 import { Client } from '@elastic/elasticsearch';
 import { IEmailSyncRepository } from '../../domain/interfaces/IEmailSyncRepository';
 import AppConst from '../../utils/Constants';
 import logger from '../../utils/Logger';
 import { EmailSyncModel } from '../persistence/documents/EmailSyncModel';
+import { ElasticsearchRepository } from './ElasticSearchRepository';
 
 @injectable()
 export class EmailSyncRepository
@@ -24,7 +24,9 @@ export class EmailSyncRepository
         await this.update(existingEmail.id!, emailDocument);
       }
     } catch (error: any) {
-      logger.error('Error creating or updating email', { message: error.message });
+      logger.error('Error creating or updating email', {
+        message: error.message,
+      });
       throw new Error('Failed to create or update email');
     }
   }
@@ -42,7 +44,9 @@ export class EmailSyncRepository
       logger.warn(`No email found with emailId: ${emailId}`);
       return null;
     } catch (error: any) {
-      logger.error('Error finding email by emailId', { message: error.message });
+      logger.error('Error finding email by emailId', {
+        message: error.message,
+      });
       throw new Error('Failed to find email by emailId');
     }
   }
