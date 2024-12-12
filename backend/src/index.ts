@@ -21,6 +21,7 @@ import { errorHandler } from './utils/ErrorHandler';
 import connectElasticsearch from './infrastructure/config/ElasticsearchConnection';
 import { initializeElasticSearchIndexing } from './infrastructure/config/InitializeElasticSearchIndexing';
 import { initializeIocContainer } from './infrastructure/dependencyInjection/container';
+import rateLimiter from './middleware/rateLimiter';
 
 import './presentation/controllers/HealthCheckController';
 import AppConst from './utils/Constants';
@@ -66,6 +67,7 @@ import { createServer } from 'http';
       );
       app.use(bodyParser.urlencoded({ extended: true }));
       app.use(bodyParser.json());
+      app.use(rateLimiter);
     });
 
     // Set the error handling middleware

@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { inject } from 'inversify';
 import { IEmailSyncService } from '../application/interfaces/IEmailSyncService';
 import { TYPES } from '../infrastructure/dependencyInjection/types';
+import rateLimiter from '../middleware/rateLimiter';
 
 @controller('/api/email')
 export class EmailController {
@@ -11,7 +12,7 @@ export class EmailController {
     private emailSyncService: IEmailSyncService,
   ) {}
 
-  @httpGet('/get')
+  @httpGet('/get', rateLimiter)
   public async getEmails(req: Request, res: Response): Promise<void> {
     try {
       const accessToken = this.extractToken(req, res);
@@ -22,7 +23,7 @@ export class EmailController {
     }
   }
 
-  @httpPost('/listen')
+  @httpPost('/listen', rateLimiter)
   public async listen(req: Request, res: Response): Promise<void> {
     if (req.query.validationToken) {
       res.send(req.query.validationToken); // Validate the webhook
