@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 import { IUserRepository } from '../../domain/interfaces/IUserRepository';
-import { ElasticsearchRepository } from './ElasticSearchRepository';
+import { ElasticsearchRepository } from '../persistence/repositories/ElasticSearchRepository';
 import { Client } from '@elastic/elasticsearch';
 import logger from '../../utils/Logger';
 import { UserModel } from '../persistence/documents/UserModel';

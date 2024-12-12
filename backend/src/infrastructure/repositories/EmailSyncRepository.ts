@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import { ElasticsearchRepository } from './ElasticSearchRepository';
+import { ElasticsearchRepository } from '../persistence/repositories/ElasticSearchRepository';
 import { Client } from '@elastic/elasticsearch';
 import { IEmailSyncRepository } from '../../domain/interfaces/IEmailSyncRepository';
 import AppConst from '../../utils/Constants';
