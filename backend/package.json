@@ -22,8 +22,6 @@
     "@azure/identity": "^4.3.0",
     "@elastic/elasticsearch": "^7.17.0",
     "@microsoft/microsoft-graph-client": "^3.0.7",
-    "@types/dotenv": "^8.2.0",
-    "@types/socket.io": "^3.0.2",
     "axios": "^1.7.2",
     "bcryptjs": "^2.4.3",
     "cjs-loader": "^0.1.0",
@@ -43,10 +41,10 @@
     "ngrok": "^5.0.0-beta.2",
     "reflect-metadata": "^0.2.2",
     "socket.io": "^4.7.5",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.3",
     "winston": "^3.13.0",
-    "winston-daily-rotate-file": "^5.0.0",
-    "swagger-jsdoc": "^6.1.0",
-    "swagger-ui-express": "^4.3.0"
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -56,6 +54,9 @@
     "@types/express": "^4.17.21",
     "@types/express-session": "^1.18.0",
     "@types/node": "^20.14.4",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui": "^3.52.4",
+    "@types/swagger-ui-express": "^4.1.7",
     "@typescript-eslint/eslint-plugin": "^7.13.1",
     "@typescript-eslint/parser": "^7.13.1",
     "eslint": "^9.5.0",
