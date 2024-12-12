@@ -2,12 +2,19 @@ import AxiosWrapper from '../../utils/AxiosWrapper';
 import logger from '../../utils/Logger';
 import ngrok from 'ngrok';
 
+/**
+ * Service class for managing Ngrok connections.
+ */
 class NgrokService {
   private static instance: NgrokService;
   public url: string | null = null;
 
   private constructor() {}
 
+  /**
+   * Get the singleton instance of NgrokService.
+   * @returns {NgrokService} The singleton instance.
+   */
   public static getInstance(): NgrokService {
     if (!NgrokService.instance) {
       NgrokService.instance = new NgrokService();
@@ -15,6 +22,11 @@ class NgrokService {
     return NgrokService.instance;
   }
 
+  /**
+   * Connect to Ngrok.
+   * @param {number} port - The port to connect to.
+   * @returns {Promise<string>} The Ngrok URL.
+   */
   public async connect(port: number): Promise<string> {
     logger.info(`Environment for ngrok: ${process.env.ENVIRONMENT}`);
     if (process.env.ENVIRONMENT === 'production') {
@@ -24,6 +36,12 @@ class NgrokService {
     }
     return this.url;
   }
+
+  /**
+   * Get Ngrok URL for production environment.
+   * @returns {Promise<string>} The Ngrok URL.
+   * @throws {Error} If failed to get Ngrok URL for production.
+   */
   public async getNgrokForProduction(): Promise<string> {
     try {
       const axiosWrapper = new AxiosWrapper('http://ngrok');
@@ -38,6 +56,12 @@ class NgrokService {
     }
   }
 
+  /**
+   * Get Ngrok URL for development environment.
+   * @param {number} port - The port to connect to.
+   * @returns {Promise<string>} The Ngrok URL.
+   * @throws {Error} If failed to get Ngrok URL for development.
+   */
   public async getNgrokForDev(port: number): Promise<string> {
     try {
       const authToken = process.env.NGROK_AUTHTOKEN;
@@ -59,6 +83,11 @@ class NgrokService {
     }
   }
 
+  /**
+   * Disconnect from Ngrok.
+   * @returns {Promise<void>}
+   * @throws {Error} If failed to disconnect Ngrok tunnel.
+   */
   public async disconnect(): Promise<void> {
     try {
       if (this.url) {

@@ -4,6 +4,41 @@ import { inject } from 'inversify';
 import { Client } from '@elastic/elasticsearch';
 import { TYPES } from '../infrastructure/dependencyInjection/types';
 
+/**
+ * @swagger
+ * tags:
+ *   name: HealthCheck
+ *   description: Health check related endpoints
+ */
+
+/**
+ * @swagger
+ * /health:
+ *   get:
+ *     summary: Perform a health check
+ *     tags: [HealthCheck]
+ *     responses:
+ *       200:
+ *         description: Successfully performed health check
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   description: Status of the service
+ *                 uptime:
+ *                   type: number
+ *                   description: Uptime of the service in seconds
+ *                 timestamp:
+ *                   type: string
+ *                   format: date-time
+ *                   description: Timestamp of the health check
+ *                 elasticsearch:
+ *                   type: string
+ *                   description: Status of the Elasticsearch connection
+ */
 @controller('/health')
 export class HealthCheckController {
   constructor(@inject(TYPES.ElasticsearchClient) private esClient: Client) {}
