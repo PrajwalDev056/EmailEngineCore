@@ -6,6 +6,11 @@ const DEFAULT_ELASTICSEARCH_HOST = 'http://localhost:9200';
 const MAX_RETRIES = 10;
 const RETRY_DELAY = 2000; // 2 seconds
 
+/**
+ * Connect to Elasticsearch
+ * @returns {Promise<Client>} Elasticsearch client
+ * @throws {Error} If connection to Elasticsearch fails after maximum retries
+ */
 const connectElasticsearch = async (): Promise<Client> => {
   logger.info(`Initializing Elasticsearch Client...`);
 

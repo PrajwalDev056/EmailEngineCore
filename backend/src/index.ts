@@ -3,6 +3,11 @@ import dotenv from 'dotenv';
 import * as fs from 'fs';
 import logger from './utils/Logger';
 
+/**
+ * Main entry point for the application.
+ * Initializes environment variables, sets up the server, and starts the application.
+ */
+
 const envFile =
   process.env.NODE_ENV === 'production' ? '.env' : '.env.development';
 logger.info(`Selected Environment file: ${envFile}`);

@@ -8,11 +8,21 @@ import { UserModel } from '../../infrastructure/persistence/documents/UserModel'
 import logger from '../../utils/Logger';
 import { Client } from '@microsoft/microsoft-graph-client';
 
+/**
+ * Service for handling authentication-related operations.
+ */
 @injectable()
 class AuthService implements IAuthService {
   constructor(
     @inject(TYPES.UserRepository) private userRepository: IUserRepository,
   ) {}
+
+  /**
+   * Retrieves an on-behalf-of token using the provided ID token.
+   * @param idToken - The ID token of the user.
+   * @returns A promise that resolves to the on-behalf-of token.
+   * @throws Error if the token retrieval fails.
+   */
   public async getOnBehalfToken(idToken: string): Promise<string> {
     try {
       const oboCredential = new OnBehalfOfCredential({
@@ -32,6 +42,11 @@ class AuthService implements IAuthService {
     }
   }
 
+  /**
+   * Stores the user information in the repository.
+   * @param token - The token of the user.
+   * @returns A promise that resolves when the user information is stored.
+   */
   private async storeUser(token: string): Promise<void> {
     const client = Client.init({
       authProvider: (done) => {

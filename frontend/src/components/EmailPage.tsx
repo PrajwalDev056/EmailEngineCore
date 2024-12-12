@@ -24,6 +24,11 @@ import {
 import { AppConst } from "../utils/AppConstant";
 import { debounce } from "lodash";
 
+/**
+ * EmailPage component
+ * This component displays a list of emails and handles real-time updates using WebSocket.
+ * It uses AxiosWrapper for API requests and MSAL for authentication.
+ */
 const EmailPage: React.FC = () => {
   const [emails, setEmails] = useState<Email[]>([]);
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);

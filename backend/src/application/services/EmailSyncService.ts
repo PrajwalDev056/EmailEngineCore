@@ -10,6 +10,9 @@ import { Socket } from '../../infrastructure/config/Socket';
 import { EmailSyncModel } from '../../infrastructure/persistence/documents/EmailSyncModel';
 import { IUserRepository } from '../../domain/interfaces/IUserRepository';
 
+/**
+ * Service for synchronizing emails and handling notifications.
+ */
 @injectable()
 export class EmailSyncService implements IEmailSyncService {
   constructor(
@@ -18,6 +21,12 @@ export class EmailSyncService implements IEmailSyncService {
     @inject(TYPES.UserRepository) private userRepository: IUserRepository,
   ) {}
 
+  /**
+   * Synchronizes emails for the authenticated user.
+   * @param accessToken - The access token for the Microsoft Graph API.
+   * @returns A promise that resolves when the synchronization is complete.
+   * @throws Error if there is an issue with synchronization.
+   */
   public async synchronizeEmails(accessToken: string): Promise<void> {
     const client = GraphClient.getClient(accessToken);
 
@@ -35,6 +44,12 @@ export class EmailSyncService implements IEmailSyncService {
     }
   }
 
+  /**
+   * Handles notifications for email changes.
+   * @param notification - The notification data.
+   * @param accessToken - The access token for the Microsoft Graph API.
+   * @returns A promise that resolves when the notification is handled.
+   */
   public async handleNotification(
     notification: any,
     accessToken: string,
@@ -74,6 +89,11 @@ export class EmailSyncService implements IEmailSyncService {
   }
 
   //#region Helper Methods
+
+  /**
+   * Updates email properties such as isFlagged, isMoved, and isNew.
+   * @param emails - The list of emails to update.
+   */
   private updateEmailProperties(emails: any[]) {
     emails.map((email) => {
       email.isFlagged = this.getIsFlagged(email);
@@ -82,10 +102,20 @@ export class EmailSyncService implements IEmailSyncService {
     });
   }
 
+  /**
+   * Determines if an email is flagged.
+   * @param email - The email to check.
+   * @returns True if the email is flagged, false otherwise.
+   */
   private getIsFlagged(email: any): boolean {
     return email.flag?.flagStatus === 'flagged';
   }
 
+  /**
+   * Determines if an email is moved.
+   * @param email - The email to check.
+   * @returns True if the email is moved, false otherwise.
+   */
   private getIsMoved(email: any): boolean {
     return (email.isMoved =
       email.parentFolderId != undefined &&
@@ -93,6 +123,12 @@ export class EmailSyncService implements IEmailSyncService {
       email.parentFolderId !== email.originalFolderId); // Check if folders differ);
   }
 
+  /**
+   * Stores emails in the repository.
+   * @param userEmail - The email address of the user.
+   * @param emails - The list of emails to store.
+   * @returns A promise that resolves when the emails are stored.
+   */
   private async storeEmail(userEmail: string, emails: any[]): Promise<void> {
     try {
       const user = await this.userRepository.findByEmail(userEmail);
@@ -126,6 +162,12 @@ export class EmailSyncService implements IEmailSyncService {
     }
   }
 
+  /**
+   * Creates a subscription for email notifications.
+   * @param accessToken - The access token for the Microsoft Graph API.
+   * @param userEmail - The email address of the user.
+   * @returns A promise that resolves when the subscription is created.
+   */
   private async createSubscription(
     accessToken: string,
     userEmail: string,
@@ -153,6 +195,14 @@ export class EmailSyncService implements IEmailSyncService {
   //#endregion
 
   //#region  Notification Helpers
+
+  /**
+   * Handles created email notifications.
+   * @param emailId - The ID of the created email.
+   * @param newEmail - The new email data.
+   * @param io - The Socket.io instance.
+   * @returns A promise that resolves when the notification is handled.
+   */
   private async handleCreatedNotification(
     emailId: any,
     newEmail: any,
@@ -166,6 +216,13 @@ export class EmailSyncService implements IEmailSyncService {
     }
   }
 
+  /**
+   * Handles updated email notifications.
+   * @param updatedEmail - The updated email data.
+   * @param emailId - The ID of the updated email.
+   * @param io - The Socket.io instance.
+   * @returns A promise that resolves when the notification is handled.
+   */
   private async handleUpdatedNotification(
     updatedEmail: any,
     emailId: any,
@@ -193,6 +250,12 @@ export class EmailSyncService implements IEmailSyncService {
     }
   }
 
+  /**
+   * Handles deleted email notifications.
+   * @param emailId - The ID of the deleted email.
+   * @param io - The Socket.io instance.
+   * @returns A promise that resolves when the notification is handled.
+   */
   private async handleDeletedNotification(emailId: any, io: any) {
     const email = await this.emailSyncRepository.findByEmailId(emailId);
     if (email != null) {

@@ -6,6 +6,11 @@ import { LOCAL_STORAGE_KEYS } from "../utils/LocalStorageConstant";
 import { useNavigate } from "react-router-dom";
 import { AppConst } from "../utils/AppConstant";
 
+/**
+ * AddAccount component
+ * This component handles the process of adding an Outlook account and fetching emails.
+ * It uses the MSAL library for authentication and AxiosWrapper for API requests.
+ */
 const AddAccount: React.FC = () => {
   const axiosWrapper = new AxiosWrapper(AppConst.API_BASEURL);
   const navigate = useNavigate();
@@ -37,6 +42,10 @@ const AddAccount: React.FC = () => {
     }
   }, [account, instance]);
 
+  /**
+   * Collects the On Behalf Of Token using the provided idToken.
+   * @param {string} idToken - The ID token obtained from MSAL.
+   */
   const collectOnBehalfOfToken = async (idToken: string) => {
     try {
       const response = await axiosWrapper.post("/auth/login", { idToken });
@@ -47,6 +56,7 @@ const AddAccount: React.FC = () => {
       console.error("Error collecting On Behalf Of Token", error);
     }
   };
+
   return (
     <div className="container center-screen">
       {inProgress && <h3>Adding Outlook Account & Fetching Emails...</h3>}
