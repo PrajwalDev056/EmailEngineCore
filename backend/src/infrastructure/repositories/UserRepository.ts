@@ -21,17 +21,22 @@ export class UserRepository
    * @returns The user document or null if not found.
    */
   public async findByEmail(email: any): Promise<UserModel | null> {
-    const body = {
-      match: { email },
-    };
+    try {
+      const body = {
+        match: { email },
+      };
 
-    const result = await this.findOne(body);
-    if (result && result.email) {
-      logger.info(`User found with email: ${email}`);
-      return result;
+      const result = await this.findOne(body);
+      if (result && result.email) {
+        logger.info(`User found with email: ${email}`);
+        return result;
+      }
+
+      logger.warn(`No user found with email: ${email}`);
+      return null;
+    } catch (error: any) {
+      logger.error('Error finding user by email', { message: error.message });
+      throw new Error('Failed to find user by email');
     }
-
-    logger.warn(`No user found with email: ${email}`);
-    return null;
   }
 }

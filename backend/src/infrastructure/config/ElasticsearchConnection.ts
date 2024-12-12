@@ -30,11 +30,11 @@ const connectElasticsearch = async (): Promise<Client> => {
         `Elasticsearch connected successfully\nHealth: ${JSON.stringify(health)}`,
       );
       return esClient;
-    } catch (err) {
+    } catch (err: any) {
       attempts++;
       logger.error(
         `Elasticsearch connection error (attempt ${attempts}):`,
-        err,
+        { message: err.message },
       );
 
       if (attempts >= MAX_RETRIES) {

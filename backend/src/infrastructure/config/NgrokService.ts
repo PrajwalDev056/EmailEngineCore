@@ -25,12 +25,17 @@ class NgrokService {
     return this.url;
   }
   public async getNgrokForProduction(): Promise<string> {
-    const axiosWrapper = new AxiosWrapper('http://ngrok');
-    const response = await axiosWrapper.get('http://ngrok:4040/api/tunnels');
-    logger.info(`Response ${JSON.stringify(response.data)}`);
-    const publicUrl = response.data.tunnels[0].public_url;
-    logger.info(`Ngrok Public Url: ${publicUrl}`);
-    return publicUrl;
+    try {
+      const axiosWrapper = new AxiosWrapper('http://ngrok');
+      const response = await axiosWrapper.get('http://ngrok:4040/api/tunnels');
+      logger.info(`Response ${JSON.stringify(response.data)}`);
+      const publicUrl = response.data.tunnels[0].public_url;
+      logger.info(`Ngrok Public Url: ${publicUrl}`);
+      return publicUrl;
+    } catch (error: any) {
+      logger.error('Error getting ngrok for production', { message: error.message });
+      throw new Error('Failed to get ngrok for production');
+    }
   }
 
   public async getNgrokForDev(port: number): Promise<string> {
@@ -48,9 +53,9 @@ class NgrokService {
         logger.info(`Ngrok tunnel established at ${this.url}`);
       }
       return this.url;
-    } catch (error) {
-      logger.error('Error connecting to ngrok:', error);
-      throw new Error('Failed to establish ngrok tunnel');
+    } catch (error: any) {
+      logger.error('Error getting ngrok for dev', { message: error.message });
+      throw new Error('Failed to get ngrok for dev');
     }
   }
 
@@ -61,8 +66,8 @@ class NgrokService {
         this.url = null;
         logger.info('Ngrok tunnel disconnected');
       }
-    } catch (error) {
-      logger.error('Error disconnecting from ngrok:', error);
+    } catch (error: any) {
+      logger.error('Error disconnecting from ngrok', { message: error.message });
       throw new Error('Failed to disconnect ngrok tunnel');
     }
   }

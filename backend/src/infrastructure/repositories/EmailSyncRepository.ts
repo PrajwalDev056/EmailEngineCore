@@ -16,37 +16,52 @@ export class EmailSyncRepository
   }
 
   public async createOrUpdate(emailDocument: EmailSyncModel): Promise<void> {
-    const existingEmail = await this.findByEmailId(emailDocument.emailId);
-    if (!existingEmail) {
-      await this.create(emailDocument);
-    } else {
-      await this.update(existingEmail.id!, emailDocument);
+    try {
+      const existingEmail = await this.findByEmailId(emailDocument.emailId);
+      if (!existingEmail) {
+        await this.create(emailDocument);
+      } else {
+        await this.update(existingEmail.id!, emailDocument);
+      }
+    } catch (error: any) {
+      logger.error('Error creating or updating email', { message: error.message });
+      throw new Error('Failed to create or update email');
     }
   }
 
   public async findByEmailId(emailId: any): Promise<EmailSyncModel | null> {
-    const body = {
-      match: { emailId },
-    };
-    const result = await this.findOne(body);
-    if (result) {
-      logger.info(`Email found with emailId: ${emailId}`);
-      return result;
+    try {
+      const body = {
+        match: { emailId },
+      };
+      const result = await this.findOne(body);
+      if (result) {
+        logger.info(`Email found with emailId: ${emailId}`);
+        return result;
+      }
+      logger.warn(`No email found with emailId: ${emailId}`);
+      return null;
+    } catch (error: any) {
+      logger.error('Error finding email by emailId', { message: error.message });
+      throw new Error('Failed to find email by emailId');
     }
-    logger.warn(`No email found with emailId: ${emailId}`);
-    return null;
   }
 
   public async findByUserId(userId: any): Promise<EmailSyncModel | null> {
-    const body = {
-      match: { userId },
-    };
-    const result = await this.findOne(body);
-    if (result) {
-      logger.info(`Email found with userId: ${userId}`);
-      return result;
+    try {
+      const body = {
+        match: { userId },
+      };
+      const result = await this.findOne(body);
+      if (result) {
+        logger.info(`Email found with userId: ${userId}`);
+        return result;
+      }
+      logger.warn(`No email found with userId: ${userId}`);
+      return null;
+    } catch (error: any) {
+      logger.error('Error finding email by userId', { message: error.message });
+      throw new Error('Failed to find email by userId');
     }
-    logger.warn(`No email found with userId: ${userId}`);
-    return null;
   }
 }

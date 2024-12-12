@@ -4,6 +4,7 @@ import { inject } from 'inversify';
 import { TYPES } from '../infrastructure/dependencyInjection/types';
 import { IAuthService } from '../application/interfaces/IAuthService';
 import rateLimiter from '../middleware/rateLimiter';
+import logger from '../utils/Logger';
 
 /**
  * @swagger
@@ -48,11 +49,17 @@ export class AuthController {
 
   @httpPost('/login', rateLimiter)
   public async login(req: Request, res: Response): Promise<void> {
-    const { idToken } = req.body;
-    if (idToken == null) {
-      res.status(404).json({ error: 'Id Token is undefined' });
+    try {
+      const { idToken } = req.body;
+      if (idToken == null) {
+        res.status(404).json({ error: 'Id Token is undefined' });
+        return;
+      }
+      const obToken = await this.authService.getOnBehalfToken(idToken);
+      res.json({ token: obToken });
+    } catch (error: any) {
+      logger.error('Error during login', { message: error.message });
+      res.status(500).json({ error: 'Failed to login' });
     }
-    const obToken = await this.authService.getOnBehalfToken(idToken);
-    res.json({ token: obToken });
   }
 }
