@@ -58,3 +58,24 @@
     box-shadow: 0 0 5px #2b88d8;
   }
 }
+
+/* Material-UI specific styles */
+.MuiContainer-root {
+  padding: 2rem;
+}
+
+.MuiTypography-root {
+  margin-bottom: 1rem;
+}
+
+.MuiButton-root {
+  margin-top: 1rem;
+}
+
+.MuiBox-root {
+  margin-bottom: 1rem;
+}
+
+.MuiCircularProgress-root {
+  margin-left: 0.5rem;
+}

@@ -1,6 +1,7 @@
 import React from "react";
 import { useMsal } from "@azure/msal-react";
 import { useNavigate } from "react-router-dom";
+import { Container, Typography, Button, Box } from "@mui/material";
 
 /**
  * Home component
@@ -27,27 +28,21 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="container auth-btn-container">
-      <h1 className="app-title">Email Engine Core</h1>
+    <Container className="auth-btn-container">
+      <Typography variant="h1" className="app-title">Email Engine Core</Typography>
       {isAuthenticated ? (
-        <>
-          <div className="text-center">
-            <p>Welcome: {accounts[0].username}</p>
-          </div>
-          <div className="text-center">
-            <button onClick={handleEmailSync} className="btn btn-primary">
-              Sync Email
-            </button>
-          </div>
-        </>
+        <Box textAlign="center">
+          <Typography>Welcome: {accounts[0].username}</Typography>
+          <Button onClick={handleEmailSync} variant="contained" color="primary">
+            Sync Email
+          </Button>
+        </Box>
       ) : (
-        <>
-          <button onClick={handleLogin} className="btn btn-primary">
-            Login with Outlook
-          </button>
-        </>
+        <Button onClick={handleLogin} variant="contained" color="primary">
+          Login with Outlook
+        </Button>
       )}
-    </div>
+    </Container>
   );
 };
 

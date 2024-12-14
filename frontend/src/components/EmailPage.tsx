@@ -5,8 +5,18 @@ import {
   Modal,
   Table,
   Alert,
-  Spinner,
-} from "react-bootstrap";
+  CircularProgress,
+  Box,
+  Typography,
+  IconButton,
+  Tooltip,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper,
+} from "@mui/material";
 import { CSSTransition } from 'react-transition-group';
 import AxiosWrapper from "../utils/AxiosWrapper";
 import { useMsal } from "@azure/msal-react";
@@ -169,103 +179,117 @@ const EmailPage: React.FC = () => {
 
   return (
     <Container className="main-content">
-      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 className="h2">Email Data Synchronization</h1>
-        <p className="lead">
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3} borderBottom={1} pb={2}>
+        <Typography variant="h4">Email Data Synchronization</Typography>
+        <Typography variant="subtitle1">
           <small>Sync-Status: {syncStatus}</small>
-        </p>
-        <p className="lead">
+        </Typography>
+        <Typography variant="subtitle1">
           <small>Connection Status: {connectionStatus}</small>
-        </p>
+        </Typography>
         {isRetrying && (
-          <p className="lead">
+          <Typography variant="subtitle1">
             <small>Retrying to connect... (Attempt {retryCount})</small>
-            <Spinner animation="border" size="sm" />
-          </p>
+            <CircularProgress size={20} />
+          </Typography>
         )}
         {connectionStatus !== "Connected" && !isRetrying && (
-          <Button onClick={attemptReconnect} variant="primary">
+          <Button onClick={attemptReconnect} variant="contained" color="primary">
             Retry Connection
           </Button>
         )}
-      </div>
+      </Box>
       {connectionStatus !== "Connected" && (
-        <Alert variant="danger">Connection issue: {connectionStatus}</Alert>
+        <Alert severity="error">Connection issue: {connectionStatus}</Alert>
       )}
-      <Table bordered striped hover responsive>
-        <thead className="thead-light">
-          <tr>
-            <th>Subject</th>
-            <th>Sender name</th>
-            <th>Status</th>
-            <th>Flag</th>
-          </tr>
-        </thead>
-        <tbody>
-          {emails.map((email) => (
-            <CSSTransition key={email.id} timeout={500} classNames="email-new">
-              <tr
-                key={email.id}
-                onClick={() => handleRowClick(email)}
-                className="cursor-pointer"
-              >
-                <td>
-                  <strong>{email.subject}</strong>
-                </td>
-                <td>{email.sender.emailAddress.name}</td>
-                <td>
-                  {email.isRead ? (
-                    <FontAwesomeIcon icon={faEnvelopeOpen} title="Read" className="email-icon-glow-read" />
-                  ) : (
-                    <FontAwesomeIcon icon={faEnvelope} title="Unread" className="email-icon-glow-read" />
-                  )}
-                  {email.isMoved && (
-                    <FontAwesomeIcon
-                      icon={faFolder}
-                      title="Moved"
-                      className="ml-2"
-                    />
-                  )}
-                </td>
-                <td>
-                  {email.isFlagged && (
-                    <FontAwesomeIcon icon={faFlag} title="Flagged" className="email-icon-glow-flag" />
-                  )}
-                  {email.isDeleted && (
-                    <FontAwesomeIcon icon={faTrash} title="Deleted" />
-                  )}
-                </td>
-              </tr>
-            </CSSTransition>
-          ))}
-        </tbody>
-      </Table>
-      <Modal show={showModal} onHide={handleCloseModal} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>{selectedEmail?.subject}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Subject</TableCell>
+              <TableCell>Sender name</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Flag</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {emails.map((email) => (
+              <CSSTransition key={email.id} timeout={500} classNames="email-new">
+                <TableRow
+                  key={email.id}
+                  onClick={() => handleRowClick(email)}
+                  className="cursor-pointer"
+                >
+                  <TableCell>
+                    <strong>{email.subject}</strong>
+                  </TableCell>
+                  <TableCell>{email.sender.emailAddress.name}</TableCell>
+                  <TableCell>
+                    {email.isRead ? (
+                      <Tooltip title="Read">
+                        <IconButton>
+                          <FontAwesomeIcon icon={faEnvelopeOpen} className="email-icon-glow-read" />
+                        </IconButton>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="Unread">
+                        <IconButton>
+                          <FontAwesomeIcon icon={faEnvelope} className="email-icon-glow-read" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                    {email.isMoved && (
+                      <Tooltip title="Moved">
+                        <IconButton>
+                          <FontAwesomeIcon icon={faFolder} className="ml-2" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {email.isFlagged && (
+                      <Tooltip title="Flagged">
+                        <IconButton>
+                          <FontAwesomeIcon icon={faFlag} className="email-icon-glow-flag" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                    {email.isDeleted && (
+                      <Tooltip title="Deleted">
+                        <IconButton>
+                          <FontAwesomeIcon icon={faTrash} />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </TableCell>
+                </TableRow>
+              </CSSTransition>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Modal open={showModal} onClose={handleCloseModal}>
+        <Box>
+          <Typography variant="h6">{selectedEmail?.subject}</Typography>
+          <Typography>
             <strong>From:</strong> {selectedEmail?.sender.emailAddress.name}
-          </p>
-          <p>
+          </Typography>
+          <Typography>
             <strong>Email:</strong> {selectedEmail?.sender.emailAddress.address}
-          </p>
-          <p>
+          </Typography>
+          <Typography>
             <strong>Received:</strong> {selectedEmail?.receivedDateTime}
-          </p>
-          <div>
+          </Typography>
+          <Box>
             <strong>Body:</strong>
             <div
               dangerouslySetInnerHTML={{ __html: selectedEmail?.bodyPreview }}
             />
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button type="button" variant="secondary" onClick={handleCloseModal}>
+          </Box>
+          <Button type="button" variant="contained" color="secondary" onClick={handleCloseModal}>
             Close
           </Button>
-        </Modal.Footer>
+        </Box>
       </Modal>
     </Container>
   );

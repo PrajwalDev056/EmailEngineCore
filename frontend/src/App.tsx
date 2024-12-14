@@ -2,7 +2,7 @@ import React from "react";
 import AppRoutes from "./routes";
 import "./App.css";
 import { useMsal } from "@azure/msal-react";
-import { Col, Container, Row } from "react-bootstrap";
+import { Container, Grid, Box } from "@mui/material";
 
 const App: React.FC = () => {
   const { accounts } = useMsal();
@@ -11,21 +11,21 @@ const App: React.FC = () => {
   return (
     <>
       {!isAuthenticated && (
-        <div className="auth-landing-page">
-          <div className="auth-container">
-            <div className="button-container">
+        <Box className="auth-landing-page">
+          <Box className="auth-container">
+            <Box className="button-container">
               <AppRoutes />
-            </div>
-          </div>
-        </div>
+            </Box>
+          </Box>
+        </Box>
       )}
       {isAuthenticated && (
         <Container>
-          <Row>
-            <Col xs={12} id="page-content-wrapper">
+          <Grid container>
+            <Grid item xs={12} id="page-content-wrapper">
               <AppRoutes />
-            </Col>
-          </Row>
+            </Grid>
+          </Grid>
         </Container>
       )}
     </>
