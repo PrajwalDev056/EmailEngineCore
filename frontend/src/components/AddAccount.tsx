@@ -5,6 +5,7 @@ import { InteractionRequiredAuthError } from "@azure/msal-browser";
 import { LOCAL_STORAGE_KEYS } from "../utils/LocalStorageConstant";
 import { useNavigate } from "react-router-dom";
 import { AppConst } from "../utils/AppConstant";
+import { Container, Typography, CircularProgress } from "@mui/material";
 
 /**
  * AddAccount component
@@ -58,9 +59,16 @@ const AddAccount: React.FC = () => {
   };
 
   return (
-    <div className="container center-screen">
-      {inProgress && <h3>Adding Outlook Account & Fetching Emails...</h3>}
-    </div>
+    <Container className="center-screen">
+      {inProgress && (
+        <>
+          <Typography variant="h5" component="h3">
+            Adding Outlook Account & Fetching Emails...
+          </Typography>
+          <CircularProgress />
+        </>
+      )}
+    </Container>
   );
 };
 
